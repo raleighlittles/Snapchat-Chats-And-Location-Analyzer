@@ -28,6 +28,7 @@ if not (len(timestamps) == len(longitudes) == len(latitudes)):
 map = folium.Map(zoom_start=12)
 
 for i in range(0, len(latitudes)):
-    folium.Marker([latitudes[i], longitudes[i]], popup=timestamps[i]).add_to(map)
+    folium.Marker([latitudes[i], longitudes[i]],
+                  popup=timestamps[i]).add_to(map)
 
-map.save("map.html")
+map.save("snapchat-map.html")
