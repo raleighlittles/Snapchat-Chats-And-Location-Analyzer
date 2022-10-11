@@ -4,48 +4,51 @@ import html
 import json
 import operator
 
-with open("chat_history.json") as json_file:
 
-    full_chat_history = json.load(json_file)
+if __name__ == "__main__":
+    with open("chat_history.json") as json_file:
 
-    # Build up a dictionary, where the keys are usernames, and the values are a list of messages either sent or received from that user
-    parsed_chat_history = collections.defaultdict(list)
+        full_chat_history = json.load(json_file)
 
-    for chat_type in full_chat_history.keys():
+        # Build up a dictionary, where the keys are usernames, and the values are a list of messages either sent or received from that user
+        parsed_chat_history = collections.defaultdict(list)
 
-        for chat in full_chat_history[chat_type]:
+        for chat_type in full_chat_history.keys():
 
-            # A chat object looks like:
-            # {'From': '<user>', 'Media Type': 'TEXT', 'Created': '2022-07-22 19:28:21 UTC', 'Text': 'Hello World'}
+            for chat in full_chat_history[chat_type]:
 
-            if chat_type.startswith("Received"):
-                username = chat['From']
+                # A chat object looks like:
+                # {'From': '<user>', 'Media Type': 'TEXT', 'Created': '2022-07-22 19:28:21 UTC', 'Text': 'Hello World'}
 
-            elif chat_type.startswith("Sent"):
-                username = chat['To']
+                if chat_type.startswith("Received"):
+                    username = chat['From']
 
-            # To make sorting easier ...
-            unix_timestamp_for_chat = int(datetime.datetime.strptime(
-                chat['Created'], "%Y-%m-%d %H:%M:%S %Z").timestamp())
+                elif chat_type.startswith("Sent"):
+                    username = chat['To']
 
-            chat['Created-Timestamp'] = unix_timestamp_for_chat
+                # To make sorting easier ...
+                unix_timestamp_for_chat = int(datetime.datetime.strptime(
+                    chat['Created'], "%Y-%m-%d %H:%M:%S %Z").timestamp())
 
-            message_body = chat['Text']
+                chat['Created-Timestamp'] = unix_timestamp_for_chat
 
-            # Convert symbols like '&#39' into the actual character representation
-            if (message_body is not None):
-                message_body = html.unescape(message_body)
+                message_body = chat['Text']
 
-            parsed_chat_history[username].append(chat)
+                # Convert symbols like '&#39' into the actual character representation
+                if (message_body is not None):
+                    message_body = html.unescape(message_body)
 
-    # Sort the messages for each user by timestamp,
-    # and then dump them out to a JSON file
-    for username in parsed_chat_history.keys():
-        parsed_chat_history[username] = sorted(
-            parsed_chat_history[username], key=operator.itemgetter('Created-Timestamp'))
+                parsed_chat_history[username].append(chat)
 
-        with open("snap-chat-history-{}.json".format(username), 'w') as output_json_file:
-            # ensure_ascii=False to make emojis render correctly
-            # https://stackoverflow.com/a/52206290/1576548
-            json.dump(
-                parsed_chat_history[username], output_json_file, indent=4, ensure_ascii=False)
+        # Sort the messages for each user by timestamp,
+        # and then dump them out to a JSON file
+        for username in parsed_chat_history.keys():
+            parsed_chat_history[username] = sorted(
+                parsed_chat_history[username], key=operator.itemgetter('Created-Timestamp'))
+
+            timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+            with open("{}_snapchat-chat-history-{}.json".format(timestamp, username), 'w') as output_json_file:
+                # ensure_ascii=False to make emojis render correctly
+                # https://stackoverflow.com/a/52206290/1576548
+                json.dump(
+                    parsed_chat_history[username], output_json_file, indent=4, ensure_ascii=False)
