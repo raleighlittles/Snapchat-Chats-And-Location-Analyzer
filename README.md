@@ -52,7 +52,24 @@ To use, first install [lxml](https://lxml.de/), then run:
 $ python3 snapchat_generate_gpx_from_location_history.py --input-file=location_history.json --output_file=<YOUR GPX FILENAME HERE>
 ```
 
-Here's a screenshot using gpx.studio:
+Here's an example of what the resulting file looks like:
+
+```
+<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="snapchat_generate_gpx_from_location_history.py">
+  <metadata>
+    <copyright author="Z390-AORUS-PRO-WIFI"/>
+    <time>2023-05-07T15:58:55.056307</time>
+    <keywords>https://github.com/raleighlittles/Snapchat-Chats-And-Location-Analyzer</keywords>
+    <bounds minlat="32.703" minlon="-116.122" maxlat="37.947" maxlon="-120.515"/>
+  </metadata>
+  <wpt lat="34.207" lon="-118.429">
+    <time>2022-08-07T20:11:19.000000</time>
+    <cmt>Measurement 0 of 13262</cmt>
+  </wpt>
+```
+
+Loading this into the GPX viewer of your choice:
 
 ![gpx studio screenshot](./docs/gpx_viewer_screenshot.png)
 

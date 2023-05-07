@@ -24,13 +24,16 @@ def generate_location_history_gpx_file(input_json_filename: str, output_gpx_file
     # The GPX file standard requires that you specify the coordinate bounds
     min_lat, min_lon, max_lat, max_lon = min(latitudes), min(
         longitudes), max(latitudes), max(longitudes)
+    
+    gpx_time_format = "%Y-%m-%dT%H:%M:%S.%f"
 
-    gpx_document = elem_maker.gpx(elem_maker.metadata(elem_maker.copyright(author=socket.gethostname()), elem_maker.time(str(datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f"))), elem_maker.keywords("https://github.com/raleighlittles/Snapchat-Chats-And-Location-Analyzer"),
+    gpx_document = elem_maker.gpx(elem_maker.metadata(elem_maker.copyright(author=socket.gethostname()), elem_maker.time(str(datetime.datetime.now().strftime(gpx_time_format))), elem_maker.keywords("https://github.com/raleighlittles/Snapchat-Chats-And-Location-Analyzer"),
                                   elem_maker.bounds(minlat=str(min_lat), minlon=str(min_lon), maxlat=str(max_lat), maxlon=str(max_lon))), xmlns="http://www.topografix.com/GPX/1/1", version="1.1", creator=str(os.path.basename(__file__)))
 
     for i in range(0, len(timestamps)):
-        gpx_document.append(elem_maker.wpt(elem_maker.cmt(
-            timestamps[i]), lat=latitudes[i], lon=longitudes[i]))
+        coordinate_measurement_time = datetime.datetime.strptime(timestamps[i], "%Y/%m/%d %H:%M:%S").strftime(gpx_time_format)
+        gpx_document.append(elem_maker.wpt( elem_maker.time(coordinate_measurement_time), elem_maker.cmt(
+            "Measurement {} of {}".format(i, len(timestamps))), lat=latitudes[i], lon=longitudes[i]))
 
     with open(output_gpx_filename, 'w') as f:
         f.write(str(xml_header))
