@@ -37,6 +37,7 @@ def generate_location_history_gpx_file(input_json_filename: str, output_gpx_file
 
     with open(output_gpx_filename, 'w') as f:
         f.write(str(xml_header))
+        f.write("\n")
         f.write(lxml.etree.tostring(gpx_document, pretty_print=True).decode())
         f.close()
 
