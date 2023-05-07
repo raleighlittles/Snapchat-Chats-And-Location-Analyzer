@@ -1,34 +1,22 @@
 import folium
 import json
 
-with open("location_history.json") as location_history_json_file:
-    raw_loc_history_json_data = json.load(location_history_json_file)
+# local
+import location_parser_helper
 
- # The location history file contains multiple subfields
- # They are: 'Frequent Locations', 'Latest Location', 'Home & Work', 'Daily Top Locations', and 'Location History' (the one we're interested in)
-timestamp_location_history = raw_loc_history_json_data['Location History']
-timestamps, latitudes, longitudes = [], [], []
+# TODO: Add argparse support for json filename
 
-for entry in timestamp_location_history:
+def main():
 
-    # Each entry looks something like:
-    # {'Time': '2021/09/02 20:37:47 UTC', 'Latitude, Longitude': '37.332 ± 39.66 meters, -121.884 ± 39.66 meters'}
+    timestamps, latitudes, longitudes = location_parser_helper.get_location_history_coordinates("location_history.json")
 
-    timestamps.append(entry['Time'])
+    map = folium.Map(zoom_start=12)
 
-    lat_with_margin, lon_with_margin = entry['Latitude, Longitude'].split(",")
+    for i in range(0, len(latitudes)):
+        folium.Marker([latitudes[i], longitudes[i]],
+                    popup=timestamps[i]).add_to(map)
 
-    latitudes.append(lat_with_margin.split()[0])
-    longitudes.append(lon_with_margin.split()[0])
+    map.save("snapchat-map.html")
 
-if not (len(timestamps) == len(longitudes) == len(latitudes)):
-    print("Error parsing timestamped LAT/LON data. Data dimensions did not match up")
-    exit(1)
-
-map = folium.Map(zoom_start=12)
-
-for i in range(0, len(latitudes)):
-    folium.Marker([latitudes[i], longitudes[i]],
-                  popup=timestamps[i]).add_to(map)
-
-map.save("snapchat-map.html")
+if __name__ == "__main__":
+    main()
