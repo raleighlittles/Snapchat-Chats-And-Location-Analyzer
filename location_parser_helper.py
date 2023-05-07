@@ -2,9 +2,6 @@ import json
 import pdb
 import typing
 
-# Each entry looks something like:
-# {'Time': '2021/09/02 20:37:47 UTC', 'Latitude, Longitude': '37.332 ± 39.66 meters, -121.884 ± 39.66 meters'}
-
 def get_location_history_coordinates(location_history_filename : str, with_timestamps=True) -> typing.List:
     with open("location_history.json") as location_history_json_file:
         raw_loc_history_json_data = json.load(location_history_json_file)
@@ -15,6 +12,8 @@ def get_location_history_coordinates(location_history_filename : str, with_times
     timestamps, latitudes, longitudes = [], [], []
 
     for entry in timestamp_location_history:
+        # Each entry looks something like:
+        # {'Time': '2021/09/02 20:37:47 UTC', 'Latitude, Longitude': '37.332 ± 39.66 meters, -121.884 ± 39.66 meters'}
         timestamps.append(entry['Time'])
 
         lat, lon = extract_lat_long_entry(entry)
