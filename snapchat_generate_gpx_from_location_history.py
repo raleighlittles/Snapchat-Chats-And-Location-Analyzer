@@ -24,11 +24,12 @@ min_lat, min_lon, max_lat, max_lon = min(latitudes), min(longitudes), max(latitu
 
 gpx_document = elem_maker.gpx( elem_maker.metadata( elem_maker.copyright(author="Raleigh Littles"), elem_maker.time(str(datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f"))), elem_maker.keywords("github.com/raleighlittles"), elem_maker.bounds(minlat=str(min_lat), minlon=str(min_lon), maxlat=str(max_lat), maxlon=str(max_lon))), xmlns="http://www.topografix.com/GPX/1/1", version="1.1", creator=str(os.path.basename(__file__)))
 
-gpx_document.append(elem_maker.wpt(elem_maker.cmt(timestamps[0]), lat=latitudes[0], lon=longitudes[0]))
+for i in range(0, len(timestamps)):
+    gpx_document.append(elem_maker.wpt(elem_maker.cmt(timestamps[i]), lat=latitudes[i], lon=longitudes[i]))
 
 #print lxml.etree.tostring(the_doc, pretty_print=True)
 
 with open(output_file, 'w') as f:
     f.write(str(xml_header))
-    f.write(str(lxml.etree.tostring(gpx_document)))
+    f.write(lxml.etree.tostring(gpx_document, pretty_print=True).decode())
     f.close()
