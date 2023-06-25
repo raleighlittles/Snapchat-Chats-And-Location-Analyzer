@@ -6,7 +6,7 @@ import operator
 
 
 if __name__ == "__main__":
-    with open("chat_history.json") as json_file:
+    with open("chat_history.json", encoding='utf8') as json_file:
 
         full_chat_history = json.load(json_file)
 
@@ -47,7 +47,7 @@ if __name__ == "__main__":
                 parsed_chat_history[username], key=operator.itemgetter('Created-Timestamp'))
 
             timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
-            with open("{}_snapchat-chat-history-{}.json".format(timestamp, username), 'w') as output_json_file:
+            with open(f"{timestamp}_snapchat-chat-history-{username}.json", 'w', encoding='utf8') as output_json_file:
                 # ensure_ascii=False to make emojis render correctly
                 # https://stackoverflow.com/a/52206290/1576548
                 json.dump(
