@@ -16,10 +16,18 @@ Snapchat stores your entire chat history in one file, `chat_history.json`. By us
 * messages-with-bob.json
 * messages-with-cody.json
 
-To use, run:
+Usage:
 
-```bash
-$ python3 snapchat_chat_parser.py
+```
+usage: snapchat_chat_parser.py [-h] -i INPUT_CHAT_HISTORY_JSON -y YEAR -o OUTPUT_DIR
+
+options:
+  -h, --help            show this help message and exit
+  -i INPUT_CHAT_HISTORY_JSON, --input-chat-history-json INPUT_CHAT_HISTORY_JSON
+                        The path to the `chat_history.json` file
+  -y YEAR, --year YEAR  The year the snapchat dump was taken. Needed to determine format.
+  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
+                        The output directory to put the JSON files
 ```
 
 ## Map generation
