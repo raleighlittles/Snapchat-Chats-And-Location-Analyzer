@@ -3,7 +3,8 @@ import pdb
 import typing
 
 def get_location_history_coordinates(location_history_filename : str, with_timestamps=True) -> typing.List:
-    with open("location_history.json") as location_history_json_file:
+
+    with open(location_history_filename) as location_history_json_file:
         raw_loc_history_json_data = json.load(location_history_json_file)
 
     # The location history file contains multiple subfields
