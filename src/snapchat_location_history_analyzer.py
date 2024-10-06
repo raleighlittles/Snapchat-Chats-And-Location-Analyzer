@@ -13,6 +13,8 @@ def generate_folium_map(input_filename: str, output_filename: str):
 
     timestamps, latitudes, longitudes = location_parser_helper.get_location_history_coordinates(
         input_filename)
+    
+    import pdb; pdb.set_trace()
 
     map = folium.Map(zoom_start=12)
 
